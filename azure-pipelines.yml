@@ -1,0 +1,15 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: UseJava@1
+  inputs:
+    versionSpec: '17'
+    jdkArchitecture: 'x64'
+
+- script: |
+    mvn clean install
+  displayName: 'Build with Maven'
