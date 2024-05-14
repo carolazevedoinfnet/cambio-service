@@ -1,4 +1,4 @@
-FROM openjdk:19-ea-1-jdk-slim
+FROM openjdk:19-jdk-slim
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} app.jar
 RUN apt-get update && apt-get install -y bash
