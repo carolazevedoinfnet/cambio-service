@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy JAR app to Azure Web App - carol-cambio-webapp
 
 on:
@@ -11,14 +14,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Java version
         uses: actions/setup-java@v1
         with:
           java-version: '17'
-          distribution: 'temurin'
 
       - name: Build with Maven
         run: mvn clean install
@@ -36,25 +37,26 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: java-app
-
+      
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_116E6F6C0EF2401E8E2FC64D714671CF }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C1C23A0CCBFD415EAB390728DFAFA7EE }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_077E02E4BF834ED7BAD22029C89D34E4 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3.0.1
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'carol-cambio-webapp'
           slot-name: 'Production'
           package: '*.jar'
-
           
